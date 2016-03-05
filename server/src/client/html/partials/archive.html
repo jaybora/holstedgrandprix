@@ -1,0 +1,91 @@
+<div class="container">
+	<h1>Arkiv <small>Hit en bon</small></h1>
+
+	<div class="row">
+		<nav ng-hide="loading">
+			<div class="col-sm-10 col-md-8 col-lg-6">
+				<ul class="pager">
+					<li class="previous"><a ng-click="prev()"><span aria-hidden="true">&larr;</span></a></li>
+					<li class="h2">{{year}} - {{month | monthName}}</li>
+					<li class="next"><a ng-click="next()"><span aria-hidden="true">&rarr;</span></a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-10 col-md-8 col-lg-6">
+	       <div ng-show="loading" class="progress progress-striped active">
+	            <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+	                Søger bonner på server...
+	            </div>
+	        </div>
+	    </div>
+    </div>
+
+	
+	<div class="row">	
+        <div class="col-sm-10 col-md-8 col-lg-6" ng-hide="loading">
+        	<tabset>
+        		<tab heading="Sammentællinger">
+		        	<div class="panel-body">
+	         			<div class="row">
+
+        					<div class="panel panel-primary">
+        						<div class="panel-body">
+		        					<div class="row">
+		        						<div class="col-xs-4 text-right"><b>Mad</b></div>
+		        						<div class="col-xs-6">{{sumfood | number:2}} kr</div>
+		        					</div>
+		        					<div class="row">
+		        						<div class="col-xs-4 text-right"><b>Ikke mad</b></div>
+		        						<div class="col-xs-6">{{sumnonfood | number:2}} kr</div>
+		        					</div>
+		        					<div class="row">
+		        						<div class="col-xs-4 text-right"><b>Total</b></div>
+		        						<div class="col-xs-6">{{total | number:2}} kr</div>
+		        					</div>
+		        				</div>
+		        			</div>
+         					<div class="panel panel-info">
+        						<div class="panel-body">
+ 		        					<div class="row" ng-click="showcategorysumdetails(detail.tickets, category)" ng-repeat="(category, detail) in categorysums | orderBy:'category'">
+		        						<div class="col-xs-4 text-right"><b>{{category}}</b></div> 
+		        						<div class="col-xs-6">{{detail.pricesum | number:2}} kr</div>
+		        					</div>
+		        				</div>
+		        			</div>
+			        	</div>
+		        	</div>
+ 				</tab>
+ 				<tab heading="Bonner">	
+		        	<div class="panel-body">
+						<div class="row">	
+
+						<!-- <div class="col-sm-10 col-md-8 col-lg-6"> -->
+							<accordion ng-hide="loading || tickets == null">
+								<accordion-group heading="{{day.day | date:'fullDate'}} ({{tickets | ticketsForDate:day.day | sumTickets | number:2}} kr.)" ng-repeat="day in days"> 
+									<table class="table table-striped" ng-hide="loading">
+										<tr style="cursor: pointer;" 
+										    ng-repeat="ticket in tickets | ticketsForDate:day.day" 
+										    ng-click="editticket(ticket)">
+											<td>{{ticket.storeid | storeName}}</td>
+											<td class="text-right">{{ticket.lines | sumTicketLines | number:2}} kr</td>
+										</tr>
+
+									</table>
+								</accordion-group>
+							</accordion>
+						</div>
+					</div>
+				</tab>
+ 			</tabset>
+	    </div>
+	</div>
+	
+	<div class="row" ng-show="tickets == null && !loading">
+		<div class="col-sm-10 col-md-8 col-lg-6">
+    		<h5 class="alert alert-warning" >Ingen bonner</h5>
+    	</div>
+    </div>	
+</div>

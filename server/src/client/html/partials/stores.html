@@ -1,0 +1,27 @@
+<div class="container" ng-init="list()">
+	<h1>Butikker <small>Ret eller tilføj</small></h1>
+	<div class="alert alert-danger" role="alert" ng-show="errmsg">{{errmsg}}</div>
+	<div class="alert alert-success" role="alert" ng-show="resptext">{{resptext}}</div>
+	<table ng-hide="loading" class="table table-striped">
+		<tr>
+			<th>Butik</th>
+		</tr>
+		<tr style="cursor: pointer;" ng-repeat="store in stores | orderBy:'name'" ng-click="editstore(store)">
+			<td ng-hide="store.name == null || store.name == ''">{{store.name}}</td>
+			<td ng-show="store.name == null || store.name == ''">(En butik uden navn)</td>
+		</tr>
+		<caption>
+			<button class="btn btn-default" ng-click="editstore()">Ny</span></button>
+		</caption>
+
+	</table>
+	
+	<div ng-show="loading" class="progress progress-striped active">
+  		<div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+  			Venter på server..
+  		</div>
+    </div>
+
+	<h5 class="alert alert-warning" ng-show="nodata() && !loading">Ingen butikker. Opret nogen</h5>
+
+</div>

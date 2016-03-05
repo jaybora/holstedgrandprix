@@ -1,0 +1,34 @@
+application: holstedgrandprix
+version: v1
+runtime: go
+api_version: go1
+
+handlers:
+- url: /
+  static_files: client/html/index.html
+  upload: client/html/index.html
+  secure: always
+
+- url: /js
+  static_dir: client/html/js
+
+- url: /css
+  static_dir: client/html/css
+
+- url: /partials
+  static_dir: client/html/partials
+
+- url: /images
+  static_dir: client/html/images
+
+- url: /.*
+  script: _go_app
+
+# - url: /resources/.*
+#   script: _go_app
+
+# Important! Even though there's a catch all routing above,
+# without these two lines it's not going to work.
+# Make sure you have this:
+- url: /_ah/spi/.*
+  script: _go_app

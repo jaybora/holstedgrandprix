@@ -1,0 +1,9 @@
+  <uib-carousel active="active" interval="10000">
+    <uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id">
+      <img ng-src="{{slide.image}}" style="margin:auto;">
+      <div class="carousel-caption">
+        <h1>Sæbekasseløbet Holsted Skole</h1>
+        <p>Er tilbage igen den 27. maj 2016</p>
+      </div>
+    </uib-slide>
+  </uib-carousel>
