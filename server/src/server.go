@@ -1,7 +1,11 @@
 package grandprix
 
 import (
-
+	"appengine"
+	"appengine/user"
+	"fmt"
+	"github.com/GoogleCloudPlatform/go-endpoints/endpoints"
+	"net/http"
 )
 
 // EmailScope is Google's OAuth 2.0 email scope
@@ -11,25 +15,23 @@ type RootService struct {
 }
 
 func init() {
+	rs := &RootService{}
+	api, err := endpoints.RegisterService(
+		rs, "grandprix", "v1", "Services for grandprix", true)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	// Register services
+	registerEventServices(api)
+	registerTeamServices(api)
+	registerRaceServices(api)
+
+	endpoints.HandleHTTP()
+
+	http.HandleFunc("/out", out)
 
 }
-// func init() {
-// 	rs := &RootService{}
-// 	api, err := endpoints.RegisterService(rs, "dailyfinance", "v1", "Services for dailyfinance", true)
-// 	if err != nil {
-// 		panic(err.Error())
-// 	}
-
-// 	registerCategoryServices(api)
-// 	registerStoreServices(api)
-// 	registerTicketServices(api)
-// 	// registerSumServices(api)
-
-// 	endpoints.HandleHTTP()
-
-// 	http.HandleFunc("/out", out)
-
-// }
 
 // func CurrentUser(r *http.Request) (u *user.User, err error) {
 // 	c := endpoints.NewContext(r)
@@ -48,18 +50,18 @@ func init() {
 // 	return
 // }
 
-// func out(w http.ResponseWriter, r *http.Request) {
-// 	c := appengine.NewContext(r)
-// 	u := user.Current(c)
-// 	if u != nil {
-// 		url, err := user.LogoutURL(c, "/out")
-// 		if err != nil {
-// 			http.Error(w, err.Error(), http.StatusInternalServerError)
-// 			return
-// 		}
-// 		w.Header().Set("Location", url)
-// 		w.WriteHeader(http.StatusFound)
-// 		return
-// 	}
-// 	fmt.Fprintf(w, "Du er logget ud. ")
-// }
+func out(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	u := user.Current(c)
+	if u != nil {
+		url, err := user.LogoutURL(c, "/out")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Location", url)
+		w.WriteHeader(http.StatusFound)
+		return
+	}
+	fmt.Fprintf(w, "Du er logget ud. ")
+}
