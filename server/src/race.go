@@ -1,50 +1,49 @@
 package grandprix
 
 import (
-	"time"
 	"appengine"
 	"appengine/datastore"
 	"github.com/GoogleCloudPlatform/go-endpoints/endpoints"
-	"net/http"
 	"github.com/mjibson/goon"
+	"net/http"
+	"time"
 )
 
 type Race struct {
-	EventKeyForGoon *datastore.Key `json:"-" datastore:"-" goon:"parent"`
-	EventKey string `json:"eventkey" datastore:"-"`
-	No	string `json:"no" datastore:"-" goon:"id"`
-	Lane1TeamKey string `json:"lane1teamkey" datastore:"lane1teamkey"`
-	Lane2TeamKey string `json:"lane2teamkey" datastore:"lane2teamkey"`
-	Lane3TeamKey string `json:"lane3teamkey" datastore:"lane3teamkey"`
-	Lane1RaceNo string `json:"lane1raceno" datastore:"lane1raceno"`
-	Lane2RaceNo string `json:"lane2raceno" datastore:"lane2raceno"`
-	Lane3RaceNo string `json:"lane3raceno" datastore:"lane3raceno"`
-	Place1TeamKey string `json:"place1teamkey" datastore:"place1teamkey"`
-	Place2TeamKey string `json:"place2teamkey" datastore:"place2teamkey"`
-	Place3TeamKey string `json:"place3teamkey" datastore:"place3teamkey"`
-	ScheduledStartTime time.Time `json:"scheduledstarttime", datastore:"scheduledstarttime"`
-	ActualStartTime time.Time `json:"actualstarttime" datastore:"actualstarttime"`
-	ActualEndTime time.Time `json:"actualendtime" datastore:"actualendtime"`
-	Note string `json:"note" datastore:"note"`
+	EventKeyForGoon    *datastore.Key `json:"-" datastore:"-" goon:"parent"`
+	EventKey           string         `json:"eventkey" datastore:"-"`
+	No                 string         `json:"no" datastore:"-" goon:"id"`
+	Lane1TeamKey       string         `json:"lane1teamkey" datastore:"lane1teamkey"`
+	Lane2TeamKey       string         `json:"lane2teamkey" datastore:"lane2teamkey"`
+	Lane3TeamKey       string         `json:"lane3teamkey" datastore:"lane3teamkey"`
+	Lane1RaceNo        string         `json:"lane1raceno" datastore:"lane1raceno"`
+	Lane2RaceNo        string         `json:"lane2raceno" datastore:"lane2raceno"`
+	Lane3RaceNo        string         `json:"lane3raceno" datastore:"lane3raceno"`
+	Place1TeamKey      string         `json:"place1teamkey" datastore:"place1teamkey"`
+	Place2TeamKey      string         `json:"place2teamkey" datastore:"place2teamkey"`
+	Place3TeamKey      string         `json:"place3teamkey" datastore:"place3teamkey"`
+	ScheduledStartTime time.Time      `json:"scheduledstarttime", datastore:"scheduledstarttime"`
+	ActualStartTime    time.Time      `json:"actualstarttime" datastore:"actualstarttime"`
+	ActualEndTime      time.Time      `json:"actualendtime" datastore:"actualendtime"`
+	Note               string         `json:"note" datastore:"note"`
 }
 
 type RaceForJson struct {
-	No	string `json:"no"`
-	Lane1Team *TeamForJson `json:"lane1team,omitempty"`
-	Lane2Team *TeamForJson `json:"lane2team,omitempty"`
-	Lane3Team *TeamForJson `json:"lane3team,omitempty"`
-	Lane1RaceNo *string `json:"lane1raceno,omitempty"`
-	Lane2RaceNo *string `json:"lane2raceno,omitempty"`
-	Lane3RaceNo *string `json:"lane3raceno,omitempty"`
-	Place1Team *TeamForJson `json:"place1team,omitempty"`
-	Place2Team *TeamForJson `json:"place2team,omitempty"`
-	Place3Team *TeamForJson `json:"place3team,omitempty"`
-	ScheduledStartTime time.Time `json:"scheduledstarttime,omitempty"`
-	ActualStartTime *time.Time `json:"actualstarttime,omitempty"`
-	ActualEndTime *time.Time `json:"actualendtime,omitempty"`
-	Note *string `json:"note,omitempty"`
+	No                 string       `json:"no"`
+	Lane1Team          *TeamForJson `json:"lane1team,omitempty"`
+	Lane2Team          *TeamForJson `json:"lane2team,omitempty"`
+	Lane3Team          *TeamForJson `json:"lane3team,omitempty"`
+	Lane1RaceNo        *string      `json:"lane1raceno,omitempty"`
+	Lane2RaceNo        *string      `json:"lane2raceno,omitempty"`
+	Lane3RaceNo        *string      `json:"lane3raceno,omitempty"`
+	Place1Team         *TeamForJson `json:"place1team,omitempty"`
+	Place2Team         *TeamForJson `json:"place2team,omitempty"`
+	Place3Team         *TeamForJson `json:"place3team,omitempty"`
+	ScheduledStartTime time.Time    `json:"scheduledstarttime,omitempty"`
+	ActualStartTime    *time.Time   `json:"actualstarttime,omitempty"`
+	ActualEndTime      *time.Time   `json:"actualendtime,omitempty"`
+	Note               *string      `json:"note,omitempty"`
 }
-
 
 type GetSingleRaceReq struct {
 	No       string `json:"no"`
@@ -67,6 +66,8 @@ type SingleRaceResp struct {
 	Race Race `json:"race"`
 }
 
+type DeleteSingleRaceResp struct {
+}
 
 func registerRaceServices(api *endpoints.RPCService) {
 	// Get single Race
@@ -93,7 +94,12 @@ func registerRaceServices(api *endpoints.RPCService) {
 	puttest.HTTPMethod = "PUT"
 	puttest.Path = "racetest"
 	puttest.Desc = "Put a single test Race on Testevent"
-	// TODO: Delete Race
+
+	del := api.MethodByName("DeleteRace").Info()
+	del.Name = "deleterace"
+	del.HTTPMethod = "DELETE"
+	del.Path = "race"
+	del.Desc = "Delete a race"
 }
 
 // Get a single
@@ -108,7 +114,7 @@ func (ds *RootService) GetSingleRace(
 	context.Infof("Req no %s, eventkey %s", req.No, req.EventKey)
 	race := &Race{No: req.No, EventKeyForGoon: eventKeyForGoon}
 	race.EventKey = race.EventKeyForGoon.StringID()
-	
+
 	err := n.Get(race)
 
 	resp.Race = *race
@@ -170,8 +176,21 @@ func (ds *RootService) PutSingleRaceTest(
 	req *PutSingleRaceReq,
 	resp *SingleRaceResp) error {
 
-	req.Race = Race{EventKey:"Testevent", No:"01", ScheduledStartTime: time.Now()}
+	req.Race = Race{EventKey: "Testevent", No: "01", ScheduledStartTime: time.Now()}
 
 	return ds.PutSingleRace(r, req, resp)
 }
 
+func (ds *RootService) DeleteRace(
+	r *http.Request,
+	req *GetSingleRaceReq,
+	resp *DeleteSingleRaceResp) error {
+
+	context := appengine.NewContext(r)
+	n := goon.NewGoon(r)
+
+	eventkey := datastore.NewKey(context, "Event", req.EventKey, 0, nil)
+	key := datastore.NewKey(context, "Race", req.No, 0, eventkey)
+
+	return n.Delete(key)
+}
