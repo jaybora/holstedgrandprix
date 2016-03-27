@@ -28,6 +28,23 @@ type Race struct {
 	Note string `json:"note" datastore:"note"`
 }
 
+type RaceForJson struct {
+	No	string `json:"no"`
+	Lane1Team *TeamForJson `json:"lane1team,omitempty"`
+	Lane2Team *TeamForJson `json:"lane2team,omitempty"`
+	Lane3Team *TeamForJson `json:"lane3team,omitempty"`
+	Lane1RaceNo *string `json:"lane1raceno,omitempty"`
+	Lane2RaceNo *string `json:"lane2raceno,omitempty"`
+	Lane3RaceNo *string `json:"lane3raceno,omitempty"`
+	Place1Team *TeamForJson `json:"place1team,omitempty"`
+	Place2Team *TeamForJson `json:"place2team,omitempty"`
+	Place3Team *TeamForJson `json:"place3team,omitempty"`
+	ScheduledStartTime time.Time `json:"scheduledstarttime,omitempty"`
+	ActualStartTime *time.Time `json:"actualstarttime,omitempty"`
+	ActualEndTime *time.Time `json:"actualendtime,omitempty"`
+	Note *string `json:"note,omitempty"`
+}
+
 
 type GetSingleRaceReq struct {
 	No       string `json:"no"`
@@ -142,6 +159,9 @@ func (ds *RootService) PutSingleRace(
 	err = n.Get(race)
 
 	resp.Race = *race
+
+	ds.UpdateCurrentJson(r, req.Race.EventKey)
+
 	return err
 }
 

@@ -17,6 +17,11 @@ type Team struct {
 	Name string `json:"name" datastore:"name"`
 }
 
+type TeamForJson struct {
+	Key string `json:"key"`
+	Name string `json:"name"`
+}
+
 type GetSingleTeamReq struct {
 	Key string `json:"keyid"`
 	EventKey string `json:"eventkey"`
@@ -129,6 +134,9 @@ func (ds *RootService) PutSingleTeam(
 	err = n.Get(team)
 
 	resp.Team = *team
+
+	ds.UpdateCurrentJson(r, req.Team.EventKey)
+
 	return err
 }
 
