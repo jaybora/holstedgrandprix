@@ -9,6 +9,12 @@ handlers:
   upload: client/html/index.html
   secure: always
 
+- url: /admin.html
+  static_files: client/html/admin.html
+  upload: client/html/admin.html
+  secure: always
+  login: admin
+
 - url: /js
   static_dir: client/html/js
 

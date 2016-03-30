@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <title>Sæbekasseløb Holsted Skole</title>
+        <title>Løbskontrol sæbekasseløb</title>
 
         <!-- JavaScript libraries -->
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
@@ -49,27 +49,31 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#">Sæbekasseløb Holsted Skole</a>
+              <a class="navbar-brand" href="#">Løbsadministration - Sæbekasseløb Holsted Skole</a>
             </div>
 
             <div class="collapse navbar-collapse">
               <ul class="nav navbar-nav"  ng-hide="login_needed">
-                <li ng-class="{active: isActive('/program')}"
-                    data-toggle="collapse" data-target=".in">
-                    <a href="#/program">Program</a>
+                <li data-toggle="collapse" data-target=".in">
+                    <a href="/">Gå til offentlig side</a>
                 </li>
-                <li ng-class="{active: isActive('/rules')}"
+                <li ng-class="{active: isActive('/teams')}"
                     data-toggle="collapse" data-target=".in">
-                    <a href="#/rules">Regler</a></li>
+                    <a href="#/teams">Teams</a>
+                </li>
 
-                <li ng-class="{active: isActive('/2015')}"
+                <li ng-class="{active: isActive('/races')}"
                     data-toggle="collapse" data-target=".in">
-                    <a href="#/2015">2015</a></li>
+                    <a href="#/races">Race</a></li>
+
+                <li ng-class="{active: isActive('/execution')}"
+                    data-toggle="collapse" data-target=".in">
+                    <a href="#/execution">Afvikling</a></li>
               </ul>
 
               <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="/admin.html">Løbsadministration</a>
+                    <a href="/_ah/login?action=Logout">Log ud</a>
                 </li>
               </ul>
             </div>

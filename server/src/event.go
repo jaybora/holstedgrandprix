@@ -48,7 +48,7 @@ func registerEventServices(api *endpoints.RPCService) {
 	// TODO: Delete event
 
 	getevent := api.MethodByName("GetSingleEvent").Info()
-	getevent.Name = "getsinglevent"
+	getevent.Name = "getsingleevent"
 	getevent.HTTPMethod = "GET"
 	getevent.Path = "event"
 	getevent.Desc = "Get a single event"

@@ -1,0 +1,45 @@
+<div class="container">
+    <h3>Løbsprogram  <small>Følg løbet online</small></h3>
+    <div class="alert alert-warning">Dette er en TEST af løbsprogram. Det enedelige program kommer senere!</div>
+    <div ng-hide="loading">
+        <!--         <div class="table-responsive"> -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">Løbnr<br>Planlagt starttid*</th>
+                    <th class="text-center hidden-xs">Status</th>
+                    <!-- <th class="text-center">Planlagt starttid*</th> -->
+                    <th class="text-center">Bane 1</th>
+                    <th class="text-center">Bane 2</th>
+                    <th class="text-center">Bane 3</th>
+                    <th class="text-center hidden-xs">Starttid</th>
+                    <th class="text-center hidden-xs">Sluttid</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="race in event.currentjson.races" ng-class="race | raceStatusClass">
+                <td class="text-center">{{race.no}}<br>{{race.scheduledstarttime| date :'shortTime':'+0100' }}</td>
+                <td class="text-center hidden-xs"><img ng-src="/images/{{race| raceStatusImg}}" alt="{{race| raceStatus}}" style="height: 18px;" /></td>
+                <!-- <td class="text-center">{{race.scheduledstarttime| date :'shortTime':'+0100' }}</td> -->
+                <td class="text-center">
+                    {{race.lane1raceno == null ? race.lane1team.name : ('Vinder af løb ' + race.lane1raceno)}}
+                    <div ng-hide="race.lane1team | placeText:race === null">{{race.lane1team| placeText:race}}</div>
+                </td>
+                <td class="text-center">
+                    {{race.lane2raceno == null ? race.lane2team.name : ('Vinder af løb ' + race.lane2raceno)}}
+                    <div ng-hide="race.lane2team | placeText:race === null">{{race.lane2team| placeText:race}}</div>
+                </td>
+                <td class="text-center">
+                    {{race.lane3raceno == null ? race.lane3team.name : ('Vinder af løb ' + race.lane3raceno)}}
+                    <div ng-hide="race.lane3team | placeText:race === null">{{race.lane3team| placeText:race}}</div>
+                </td>
+                <td class="text-center hidden-xs">{{race.actualstarttime| date :'shortTime':'+0100' }}</td>
+                <td class="text-center hidden-xs">{{race.actualendtime| date :'shortTime':'+0100' }}</td>
+            </tr>
+
+        </table>
+        <p>* Løb bliver startet op til 10 min før tid</p>
+
+    </div>
+    <!--    </div> -->
+    <div class="container" ng-show="loading">Indlæser data...</div>
+</div>
