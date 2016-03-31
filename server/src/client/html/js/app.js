@@ -2,6 +2,7 @@ angular.module('grandprix', ['ngRoute', 'ngAnimate', 'angular-google-gapi', 'ui.
     .config(['$routeProvider', function($routeProvider) {    
         $routeProvider.when('/frontpage', {templateUrl: 'partials/frontpage.html', controller: 'FrontpageCtrl'});
         $routeProvider.when('/program', {templateUrl: 'partials/program.html', controller: 'ProgramCtrl'});
+        $routeProvider.when('/programtest', {templateUrl: 'partials/programtest.html', controller: 'ProgramCtrl'});
         $routeProvider.when('/rules', {templateUrl: 'partials/rules.html'});
         $routeProvider.when('/2015', {templateUrl: 'partials/2015.html'});
         $routeProvider.otherwise({redirectTo: 'frontpage'});
