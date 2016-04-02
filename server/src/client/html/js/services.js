@@ -3,6 +3,10 @@ angular.module('grandprix')
             var currenteventkey = "Testevent";
             var globalservice = {};
             var event = null;
+            var teams = null;
+            var teamMap = {};
+            var races = null;
+            var raceMap = {};
             // var categories = null;
             // var categoryMap = {};
             // var stores = null;
@@ -14,56 +18,64 @@ angular.module('grandprix')
 //            var gapi_grandprix;
 
 
-            // globalservice.setCategories = function(newcategories) {
-            // 	categories = newcategories;
-            // 	categoryMap = {}
-            // 	if (categories != null) {
-            // 		categories.sort(function(a, b) {
-            // 			return a.name.localeCompare(b.name)
-            // 		})
-            // 		categories.forEach(function(category) {
-            // 			categoryMap[category.id] = category;
-            // 		})			
-            // 	}
-            // }	
+            globalservice.setRaces = function (newraces) {
+                races = newraces;
+                raceMap = {}
+                if (races != null) {
+                    races.sort(function (a, b) {
+                        return a.no.localeCompare(b.no)
+                    })
+                    races.forEach(function (race) {
+                        raceMap[race.no] = race;
+                    })
+                }
+            }
 
-            // globalservice.setStores = function(newstores) {
-            // 	stores = newstores;
-            // 	storeMap = {}
-            // 	if (stores != null) {
-            // 		stores.sort(function(a, b) {
-            // 			return a.name.localeCompare(b.name)
-            // 		})
-            // 		stores.forEach(function(store) {
-            // 			storeMap[store.id] = store;
-            // 		})
-            // 	}
-            // }	
+            globalservice.setTeams = function (newteams) {
+                teams = newteams;
+                teamMap = {}
+                if (teams != null) {
+                    teams.sort(function (a, b) {
+                        return a.teamkey.localeCompare(b.teamkey)
+                    })
+                    teams.forEach(function (team) {
+                        teamMap[team.teamkey] = team;
+                    })
+                }
+            }
+
+            globalservice.getTeams = function () {
+                return teams;
+            }
+
+            globalservice.getRaces = function () {
+                return races;
+            }
 
 //            globalservice.loadCurrentJson = function () {
-                // if (loaded && !forceUpdate) {
-                // 	console.log('Already loaded basisdata. Just returning what I have');
-                // 	return promise;
-                // }
+            // if (loaded && !forceUpdate) {
+            // 	console.log('Already loaded basisdata. Just returning what I have');
+            // 	return promise;
+            // }
 
-                // loaded = true;
+            // loaded = true;
 //                console.log("Now loading current json");
 
-                // var authenticate = function() {
-                // 	console.log('Authenticating...')
-                // 	return $gapi.authed.then(function() {
-                // 		console.log('Done authenticating');
-                //    	}, function(reason) {
-                //    		console.log('Failure on authenticate as %s', reason);
-                //    	});
-                // }
+            // var authenticate = function() {
+            // 	console.log('Authenticating...')
+            // 	return $gapi.authed.then(function() {
+            // 		console.log('Done authenticating');
+            //    	}, function(reason) {
+            //    		console.log('Failure on authenticate as %s', reason);
+            //    	});
+            // }
 
-                // var getUserInfo = function() {
-                // 	return $gapi.get_user_info().then(function(newuserinfo) {
-                // 		userinfo = newuserinfo
-                // 		console.log('User is %s', newuserinfo.email)
-                // 	})
-                // }
+            // var getUserInfo = function() {
+            // 	return $gapi.get_user_info().then(function(newuserinfo) {
+            // 		userinfo = newuserinfo
+            // 		console.log('User is %s', newuserinfo.email)
+            // 	})
+            // }
 
 //                var loadApi = function () {
 //                    return $GApi.execute('grandprix', 'v1', true).then(function () {
@@ -72,20 +84,35 @@ angular.module('grandprix')
 //                    });
 //                };
 
-//                var loadIt = function () {
-//                    console.log('Now loading current json');
-//                    return $gapi.client.grandprix.getsinglevent({eventkey:currenteventkey}).then(function (resp) {
-//                        currentJson = resp.event;
-//                        console.log('Finished loading current json.');
-//                        if (resp.event === null) {
-//                            console.log('There was no categories');
-//                        } else {
-//                            console.log('There was %d races',
-//                                    resp.event.races.length);
-//                        }
-//                    });
-//                };
-//
+            var loadTeams = function () {
+                console.log('Now loading teams');
+                return GApi.execute('grandprix', 'listteams', {eventkey: currenteventkey}).then(function (resp) {
+                    console.log('Finished loading teams.');
+                    globalservice.setTeams(resp.teams);
+                    if (resp.teams === null) {
+                        console.log('There was no teams');
+                    } else {
+                        console.log('There was %d teams', resp.teams.length);
+                    }
+                });
+            };
+
+            var loadRaces = function () {
+                console.log('Now loading races');
+                return GApi.execute('grandprix', 'listraces', {eventkey: currenteventkey}).then(function (resp) {
+                    console.log('Finished loading races.');
+                    globalservice.setRaces(resp.races);
+                    if (resp.races === null) {
+                        console.log('There was no races');
+                    } else {
+                        console.log('There was %d races', resp.races.length);
+                    }
+                });
+            };
+
+            globalservice.fetchTeamsAndRaces = function () {
+                return $q.all([loadTeams(), loadRaces(), globalservice.fetchEvent()]);
+            };
 //                promise = loadApi()
 //                        // authenticate()
 //                        // .then(function() {
@@ -102,21 +129,23 @@ angular.module('grandprix')
 
             globalservice.fetchEvent = function () {
                 console.log("Fetching event...");
-                return GApi.execute('grandprix', 'getsingleevent', {eventkey: currenteventkey}).then( function(resp) {
+                return GApi.execute('grandprix', 'getsingleevent', {eventkey: currenteventkey}).then(function (resp) {
                     event = resp.event;
-                    event.currentjson = JSON.parse(resp.event.currentjson);
+                    if (event.currentjson !== null && event.currentjson.length > 0) {
+                        event.currentjson = JSON.parse(resp.event.currentjson);
+                    }
                     console.log("Got the event as: " + event);
-                }, function() {
+                }, function () {
                     console.log("error on getting current json");
                 });
             };
-            
+
             globalservice.getEvent = function () {
                 return event;
             }
             // globalservice.getCategories = function() {
             // 		return categories;
-            // }	
+            // }
 
             // globalservice.getStoreMap = function() {
             // 		return storeMap;

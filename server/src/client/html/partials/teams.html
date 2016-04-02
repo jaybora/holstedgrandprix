@@ -1,0 +1,29 @@
+<div class="container" ng-init="list()">
+    <h1>Teams <small>Ret eller tilføj</small></h1>
+    <div class="alert alert-danger" role="alert" ng-show="errmsg">{{errmsg}}</div>
+    <div class="alert alert-success" role="alert" ng-show="resptext">{{resptext}}</div>
+    <table ng-hide="loading" class="table table-striped">
+        <caption>
+            <button class="btn btn-default" ng-click="editteam(null, event.key)">Nyt</button>
+        </caption>
+        <tr>
+            <th>Team nøgle</th>
+            <th>Team navn</th>
+        </tr>
+        <tr style="cursor: pointer;" ng-repeat="team in teams| orderBy:'teamkey'" ng-click="editteam(team)">
+            <td>{{team.teamkey}}</td>
+            <td ng-hide="team.name == null || team.name == ''">{{team.name}}</td>
+            <td ng-show="team.name == null || team.name == ''">(Et team uden navn)</td>
+        </tr>
+
+    </table>
+
+    <div ng-show="loading" class="progress progress-striped active">
+        <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+            Venter på server..
+        </div>
+    </div>
+
+    <h5 class="alert alert-warning" ng-show="nodata && !loading">Ingen teams. Opret nogen</h5>
+
+</div>

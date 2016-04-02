@@ -8,18 +8,18 @@
         <!-- JavaScript libraries -->
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.js"></script>
-        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.2.2.js"></script>        
+        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.2.2.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
         <script src="js/libs/angular-locale_da-dk.js"></script>
 
 <!--        <script src="js/libs/ui-bootstrap-tpls-0.12.1.js"></script>  -->
 
         <!-- Load endpoint - angular helper lib -->
-        <script src="js/libs/angular-google-gapi.js"></script> 
+        <script src="js/libs/angular-google-gapi.js"></script>
 
         <!-- Application JavaScript -->
-        <script src="js/app.js"></script>
-        <script src="js/services.js"></script> 
+        <script src="js/appadmin.js"></script>
+        <script src="js/services.js"></script>
 
         <!-- Bootstrap -->
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -27,7 +27,7 @@
 
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-        
+
         <link rel="stylesheet" href="css/bootstrap.min.css"/>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -36,13 +36,13 @@
 
 
     </head>
-    <body ng-controller="LandingCtrl" id="thebody">
+    <body ng-controller="AdminCtrl" id="thebody">
         <nav class="navbar navbar-inverse">
           <div class="container">
             <div class="navbar-header">
-                <button type="button" 
-                        class ="navbar-toggle" 
-                        data-toggle="collapse" 
+                <button type="button"
+                        class ="navbar-toggle"
+                        data-toggle="collapse"
                         data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -80,8 +80,8 @@
           </div>
         </nav>
 
-        <div ng-view></div> 
-    
+        <div ng-view></div>
+
     </body>
     <script src="js/controllers.js"></script>
     <!-- Cloud endpoint -->
