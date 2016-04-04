@@ -2,10 +2,10 @@ angular.module('grandprix', ['ngRoute', 'ngAnimate', 'angular-google-gapi', 'ui.
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/admin', {templateUrl: 'partials/admin.html', controller: 'AdminCtrl'});
         $routeProvider.when('/teams', {templateUrl: 'partials/teams.html', controller: 'TeamsCtrl'});
-        $routeProvider.when('/races', {templateUrl: 'partials/races.html', controller: 'RacesCtrl'});
+        $routeProvider.when('/races', {templateUrl: 'partials/races.html', controller: 'ProgramCtrl'});
         $routeProvider.when('/rules', {templateUrl: 'partials/rules.html'});
         $routeProvider.when('/2015', {templateUrl: 'partials/2015.html'});
-        $routeProvider.otherwise({redirectTo: 'admin'});
+        $routeProvider.otherwise({redirectTo: 'races'});
     }])
     .run(['GApi', 'GAuth', function(GApi, GAuth) {
         var BASE = '/_ah/api';

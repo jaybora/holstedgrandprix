@@ -1,11 +1,14 @@
 <div class="container">
     <div class="page-header">
-        <h3>Løbsprogram  <small>Følg løbet online</small></h3>
+        <h2>Løbsprogram  <small>Ret og tilføj løb</small></h2>
     </div>
-    <div class="alert alert-warning">Dette er en TEST af løbsprogrammet.</div>
     <div ng-hide="loading">
         <!--         <div class="table-responsive"> -->
         <table class="table " style="table-layout:fixed;">
+            <caption>
+                <button class="btn btn-default" ng-click="editrace(null)">Tilføj løb</button>
+            </caption>
+
             <thead>
                 <tr>
                     <th class="text-center hidden-xs">Planlagt starttid*</th>
@@ -18,17 +21,18 @@
                     <th class="text-center hidden-xs">Starttid</th>
                     <th class="text-center hidden-xs">Sluttid</th>
                     <th class="text-center hidden-xs">Note</th>
+                    <th class="text-center hidden-xs">Aktion</th>
                 </tr>
             </thead>
-            <tr ng-repeat="race in event.currentjson.races" ng-class="race | raceStatusClass">
+            <tr style="cursor: pointer;" ng-repeat="race in event.currentjson.races" ng-class="race | raceStatusClass">
                 <td class="text-center hidden-xs">
-                    {{race.scheduledstarttime| date :'shortTime'}}
+                    {{race.scheduledstarttime| date :'shortTime' }}
                 </td>
                 <td class="text-center hidden-xs">
                     {{race.no}}
                 </td>
                 <td class="text-center hidden-lg hidden-md hidden-sm">
-                    {{race.no}}<br>{{race.scheduledstarttime| date :'shortTime'}}
+                    {{race.no}}<br>{{race.scheduledstarttime| date :'shortTime':'+0100' }}
                 </td>
                 <td class="text-center hidden-xs">
                     <img ng-src="/images/{{race| raceStatusImg}}" alt="{{race| raceStatus}}" style="height: 30px;" />
@@ -53,6 +57,10 @@
                 </td>
                 <td class="text-center hidden-xs">
                     {{race.note}}
+                </td>
+                <td>
+                    <button class="btn btn-primary" ng-show="race.actualstarttime == null" ng-click="startrace(race)">Start løb</button>
+                    <button class="btn btn-danger" ng-show="race.actualstarttime != null && race.actualendtime == null" ng-click="cancelstart(race)">Annuller start</button>
                 </td>
             </tr>
 

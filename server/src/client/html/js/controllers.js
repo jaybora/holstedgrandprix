@@ -23,11 +23,11 @@ angular.module('grandprix').
                     {image: 'images/2.jpg', text: 'Er tilbage igen den 27. maj 2016', id: 1}]
 
             }]).
-        controller('ProgramCtrl', ['$scope', 'GlobalService', '$timeout',
-            function ($scope, GlobalService, $timeout) {
+        controller('ProgramCtrl', ['$scope', 'GlobalService', '$timeout', '$uibModal', 'GApi',
+            function ($scope, GlobalService, $timeout, $uibModal, GApi) {
                 $scope.loading = true;
                 $scope.loadEvent = function () {
-                    $timeout($scope.loadEvent, 30000);
+                    $timeout($scope.loadEvent, 10000);
                     return GlobalService.fetchEvent().then(function () {
                         console.log("The controller got the event done");
                         $scope.event = GlobalService.getEvent();
@@ -41,12 +41,70 @@ angular.module('grandprix').
 
                 $scope.loadEvent();
 
+                $scope.startrace = function (race) {
+                    race.actualstarttime = new Date();
+                    GApi.execute('grandprix', 'putsinglerace', {race: race})
+                            .then(function (resp) {
+                                $scope.loadEvent();
+                            });
+
+                };
+
+                $scope.cancelstart = function (race) {
+                    race.actualstarttime = null;
+                    GApi.execute('grandprix', 'putsinglerace', {race: race})
+                            .then(function (resp) {
+                                $scope.loadEvent();
+                            });
+                };
+
+                $scope.editrace = function (race) {
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        templateUrl: 'partials/race.html',
+                        controller: 'RaceCtrl',
+                        resolve: {
+                            race: function () {
+                                return race;
+                            },
+                            event: function () {
+                                return $scope.event;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function (callbackdata) {
+                        console.log('Race returned %o and action %s', callbackdata.race, callbackdata.action);
+                        $scope.loading = true;
+                        if (callbackdata.action === 'update') {
+                            GApi.execute('grandprix', 'putsinglerace', {race: callbackdata.race})
+                                    .then(function (resp) {
+                                        console.log('Resp on put race: %o', resp.race)
+                                        $scope.loadEvent();
+
+                                    })
+                        } else if (callbackdata.action === 'delete') {
+                            GApi.execute('grandprix', 'deleterace', {no: callbackdata.race.no, eventkey: callbackdata.team.eventkey})
+                                    .then(function (resp) {
+                                        GlobalService.fetchTeamsAndRaces(true).then(function (resp) {
+                                            console.log('Resp on delete race: %o', resp)
+                                            $scope.loadEvent();
+                                        })
+                                    })
+                        }
+                    }, function () {
+                        console.log('Modal dismissed at: ' + new Date());
+                    });
+                };
+
             }]).
         controller('AdminCtrl', ['$scope', 'GlobalService', '$location',
             function ($scope, GlobalService, $location) {
                 $scope.isActive = function (path) {
                     return ($location.path().substr(0, path.length) == path);
                 }
+
+                GlobalService.fetchTeamsAndRaces(false);
 
             }]).
         controller('TeamsCtrl', ['$scope', 'GApi', '$uibModal', 'GlobalService',
@@ -79,11 +137,10 @@ angular.module('grandprix').
                             team: function () {
                                 return team;
                             },
-                            eventkey: function() {
+                            eventkey: function () {
                                 return ek;
                             }
                         }
-
                     });
 
                     modalInstance.result.then(function (callbackdata) {
@@ -111,8 +168,6 @@ angular.module('grandprix').
                         console.log('Modal dismissed at: ' + new Date());
                     });
                 };
-
-
             }]).
         controller('TeamCtrl', ['$scope', '$uibModalInstance', 'team', 'eventkey',
             function ($scope, $uibModalInstance, team, eventkey) {
@@ -130,9 +185,39 @@ angular.module('grandprix').
                     $scope.team = team;
                 }
 
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+            }]).
+        controller('RaceCtrl', ['$scope', '$uibModalInstance', 'GlobalService', 'race', 'event',
+            function ($scope, $uibModalInstance, GlobalService, race, event) {
+                $scope.mode = (race == null ? 'new' : 'edit');
+                $scope.ok = function () {
+                    console.log("The race is %o ", $scope.race)
+                    $uibModalInstance.close({action: 'update', race: $scope.race});
+                };
+                $scope.delete = function () {
+                    $uibModalInstance.close({action: 'delete', race: $scope.race});
+                }
+
+                if (race == null) {
+                    console.log("No race. Making a new race object..");
+                    $scope.race = {eventkey: event.key, no: null, scheduledstarttime: event.eventdate};
+                    console.log("The new race is: %o", $scope.race)
+                } else {
+                    $scope.race = race;
+                }
 
                 $scope.cancel = function () {
                     $uibModalInstance.dismiss('cancel');
                 };
+
+                $scope.getTeams = function () {
+                    return GlobalService.getTeams();
+                };
+
+                $scope.getRaces = function () {
+                    return GlobalService.getRaces();
+                }
             }])
         ;
