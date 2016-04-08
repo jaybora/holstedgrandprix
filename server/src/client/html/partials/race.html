@@ -86,6 +86,31 @@
         </div>
 
 
+        <!-- Placement -->
+        <div class="form-group">
+            <label for="lane1">1. plads</label>
+            <select class="form-control"
+                    ng-options="team.teamkey as team.name for team in getTeams()"
+                    ng-model="race.place1teamkey">
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="lane1">2. plads</label>
+            <select class="form-control"
+                    ng-options="team.teamkey as team.name for team in getTeams()"
+                    ng-model="race.place2teamkey">
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="lane1">3. plads</label>
+            <select class="form-control"
+                    ng-options="team.teamkey as team.name for team in getTeams()"
+                    ng-model="race.place3teamkey">
+            </select>
+        </div>
+        
 
         <div class="form-group">
             <div class="btn-group" role="group" aria-label="...">

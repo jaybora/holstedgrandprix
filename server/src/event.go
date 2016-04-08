@@ -176,6 +176,7 @@ func (ds *RootService) UpdateCurrentJson(r *http.Request, eventkey string) error
 	for _, race := range races {
 		racesJson = append(racesJson, RaceForJson{
 			No:                 race.No,
+			EventKey:           eventkey,
 			Lane1Team:          ds.GetTeamAsJson(r, eventkey, race.Lane1TeamKey),
 			Lane2Team:          ds.GetTeamAsJson(r, eventkey, race.Lane2TeamKey),
 			Lane3Team:          ds.GetTeamAsJson(r, eventkey, race.Lane3TeamKey),

@@ -134,7 +134,7 @@ angular.module('grandprix')
                     if (event.currentjson !== null && event.currentjson.length > 0) {
                         event.currentjson = JSON.parse(resp.event.currentjson);
                     }
-                    console.log("Got the event as: " + event);
+                    console.log("Got the event as: %o", event);
                 }, function () {
                     console.log("error on getting current json");
                 });

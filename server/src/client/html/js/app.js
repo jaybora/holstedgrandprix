@@ -66,11 +66,11 @@ angular.module('grandprix', ['ngRoute', 'ngAnimate', 'angular-google-gapi', 'ui.
                 return function(laneteam, race) {
                     if (laneteam == null) {
                         return null;
-                    } else if (race.place1team != null && laneteam.teamkey === race.place1team.teamkey) {
+                    } else if (race.place1team != null && laneteam.key === race.place1team.key) {
                         return "1. plads";
-                    } else if (race.place2team != null && laneteam.teamkey === race.place2team.teamkey) {
+                    } else if (race.place2team != null && laneteam.key === race.place2team.key) {
                         return "2. plads";
-                    } else if (race.place3team != null && laneteam.teamkey === race.place3team.teamkey) {
+                    } else if (race.place3team != null && laneteam.key === race.place3team.key) {
                         return "3. plads";
                     } else {
                         return null;

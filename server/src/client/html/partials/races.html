@@ -1,6 +1,6 @@
 <div class="container">
     <div class="page-header">
-        <h2>Løbsprogram  <small>Ret og tilføj løb</small></h2>
+        <h2>Løbsprogram for {{event.name}} den {{event.eventdate | date:'longDate'}} <small>Ret og tilføj løb</small></h2>
     </div>
     <div ng-hide="loading">
         <!--         <div class="table-responsive"> -->
@@ -25,29 +25,44 @@
                 </tr>
             </thead>
             <tr style="cursor: pointer;" ng-repeat="race in event.currentjson.races" ng-class="race | raceStatusClass">
-                <td class="text-center hidden-xs">
+                <td class="text-center hidden-xs" ng-click="editrace(race)">
                     {{race.scheduledstarttime| date :'shortTime' }}
                 </td>
-                <td class="text-center hidden-xs">
+                <td class="text-center hidden-xs" ng-click="editrace(race)">
                     {{race.no}}
                 </td>
-                <td class="text-center hidden-lg hidden-md hidden-sm">
+                <td class="text-center hidden-lg hidden-md hidden-sm" ng-click="editrace(race)">
                     {{race.no}}<br>{{race.scheduledstarttime| date :'shortTime':'+0100' }}
                 </td>
-                <td class="text-center hidden-xs">
+                <td class="text-center hidden-xs" ng-click="editrace(race)">
                     <img ng-src="/images/{{race| raceStatusImg}}" alt="{{race| raceStatus}}" style="height: 30px;" />
                 </td>
                 <td class="text-center">
                     {{race.lane1raceno == null ? race.lane1team.name : ('Vinder af løb ' + race.lane1raceno)}}
                     <div ng-hide="race.lane1team | placeText:race === null">{{race.lane1team| placeText:race}}</div>
+                    <span ng-show="race.actualstarttime != null && race.actualendtime == null">
+                        <button class="btn btn-info" ng-click="pos1(race.lane1team, race)">1</button>
+                        <button class="btn btn-primary" ng-click="pos2(race.lane1team, race)">2</button>
+                        <button class="btn btn-default" ng-click="pos3(race.lane1team, race)">3</button>
+                    </span>
                 </td>
                 <td class="text-center">
                     {{race.lane2raceno == null ? race.lane2team.name : ('Vinder af løb ' + race.lane2raceno)}}
                     <div ng-hide="race.lane2team | placeText:race === null">{{race.lane2team| placeText:race}}</div>
+                    <span ng-show="race.actualstarttime != null && race.actualendtime == null">
+                        <button class="btn btn-info" ng-click="pos1(race.lane2team, race)">1</button>
+                        <button class="btn btn-primary" ng-click="pos2(race.lane2team, race)">2</button>
+                        <button class="btn btn-default" ng-click="pos3(race.lane2team, race)">3</button>
+                    </span>
                 </td>
                 <td class="text-center">
                     {{race.lane3raceno == null ? race.lane3team.name : ('Vinder af løb ' + race.lane3raceno)}}
                     <div ng-hide="race.lane3team | placeText:race === null">{{race.lane3team| placeText:race}}</div>
+                    <span ng-show="race.actualstarttime != null && race.actualendtime == null">
+                        <button class="btn btn-info" ng-click="pos1(race.lane3team, race)">1</button>
+                        <button class="btn btn-primary" ng-click="pos2(race.lane3team, race)">2</button>
+                        <button class="btn btn-default" ng-click="pos3(race.lane3team, race)">3</button>
+                    </span>
                 </td>
                 <td class="text-center hidden-xs">
                     {{race.actualstarttime| date :'shortTime'}}
@@ -58,9 +73,10 @@
                 <td class="text-center hidden-xs">
                     {{race.note}}
                 </td>
-                <td>
+                <td class="text-center">
                     <button class="btn btn-primary" ng-show="race.actualstarttime == null" ng-click="startrace(race)">Start løb</button>
-                    <button class="btn btn-danger" ng-show="race.actualstarttime != null && race.actualendtime == null" ng-click="cancelstart(race)">Annuller start</button>
+                    <button class="btn btn-danger" ng-show="race.actualstarttime != null && race.actualendtime == null" ng-click="cancelstart(race)">Stop</button>
+                    <button class="btn btn-danger" ng-show="race.actualendtime != null" ng-click="cancelend(race)">Genstart</button>
                 </td>
             </tr>
 

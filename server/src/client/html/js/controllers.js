@@ -23,40 +23,117 @@ angular.module('grandprix').
                     {image: 'images/2.jpg', text: 'Er tilbage igen den 27. maj 2016', id: 1}]
 
             }]).
-        controller('ProgramCtrl', ['$scope', 'GlobalService', '$timeout', '$uibModal', 'GApi',
+        controller('ProgramCtrl', ['$scope', 'GlobalService', '$timeout', '$uibModal', 'GApi', '$location',
             function ($scope, GlobalService, $timeout, $uibModal, GApi) {
                 $scope.loading = true;
-                $scope.loadEvent = function () {
-                    $timeout($scope.loadEvent, 10000);
+                $scope.loadEvent = function (autoupdate) {
+                    if (autoupdate) {
+                       $timeout(function() {$scope.loadEvent(true);}, 10000);
+                    }
                     return GlobalService.fetchEvent().then(function () {
                         console.log("The controller got the event done");
                         $scope.event = GlobalService.getEvent();
+                        $scope.event.currentjson.races.forEach(function(race) {
+                            mapToDatastoreFormat(race);
+                        });
                         $scope.loading = false;
                     }, function (reason) {
                         console.log("Could not load program for event. Reason: " + reason);
                         $scope.loading = false;
                     });
 
-                };
+                };  
 
-                $scope.loadEvent();
+                
+                function mapToDatastoreFormat(race) {
+                    if (race.lane1team != null) {
+                        race.lane1teamkey = race.lane1team.key;
+                    }
+                    if (race.lane2team != null) {
+                        race.lane2teamkey = race.lane2team.key;
+                    }
+                    if (race.lane3team != null) {
+                        race.lane3teamkey = race.lane3team.key;
+                    }
+                    if (race.place1team != null) {
+                        race.place1teamkey = race.place1team.key;
+                    }
+                    if (race.place2team != null) {
+                        race.place2teamkey = race.place2team.key;
+                    }
+                    if (race.place3team != null) {
+                        race.place3teamkey = race.place3team.key;
+                    }
+                }
+
+
+
+                $scope.loadEvent(true);
 
                 $scope.startrace = function (race) {
                     race.actualstarttime = new Date();
+                    mapToDatastoreFormat(race);
                     GApi.execute('grandprix', 'putsinglerace', {race: race})
                             .then(function (resp) {
-                                $scope.loadEvent();
+                                $scope.loadEvent(false);
                             });
-
                 };
 
                 $scope.cancelstart = function (race) {
-                    race.actualstarttime = null;
+                    race.actualstarttime = new Date("0001-01-01T00:00:00Z");
+                    mapToDatastoreFormat(race);
                     GApi.execute('grandprix', 'putsinglerace', {race: race})
                             .then(function (resp) {
-                                $scope.loadEvent();
+                                $scope.loadEvent(false);
                             });
                 };
+                
+                $scope.cancelend = function (race) {
+                    race.actualendtime = new Date("0001-01-01T00:00:00Z");
+                    mapToDatastoreFormat(race);
+                    GApi.execute('grandprix', 'putsinglerace', {race: race})
+                            .then(function (resp) {
+                                $scope.loadEvent(false);
+                            });
+                };
+                
+                function checkForFinish(race) {
+                    if ((race.place1team != null || race.place1teamkey != null) &&
+                            (race.place2team != null || race.place2teamkey != null) &&
+                            (race.place3team != null || race.place2teamkey != null)) {
+                        race.actualendtime = new Date();
+                    }
+                }
+                
+                $scope.pos1 = function(laneteam, race) {
+                    mapToDatastoreFormat(race);
+                    race.place1teamkey = laneteam.key;
+                    checkForFinish(race)
+                    GApi.execute('grandprix', 'putsinglerace', {race: race})
+                            .then(function (resp) {
+                                $scope.loadEvent(false);
+                            });
+                }
+
+                $scope.pos2 = function(laneteam, race) {
+                    mapToDatastoreFormat(race);
+                    race.place2teamkey = laneteam.key;
+                    checkForFinish(race)
+                    GApi.execute('grandprix', 'putsinglerace', {race: race})
+                            .then(function (resp) {
+                                $scope.loadEvent(false);
+                            });
+                }
+
+                $scope.pos3 = function(laneteam, race) {
+                    mapToDatastoreFormat(race);
+                    race.place3teamkey = laneteam.key;
+                    checkForFinish(race)
+                    GApi.execute('grandprix', 'putsinglerace', {race: race})
+                            .then(function (resp) {
+                                $scope.loadEvent(false);
+                            });
+                }
 
                 $scope.editrace = function (race) {
                     var modalInstance = $uibModal.open({

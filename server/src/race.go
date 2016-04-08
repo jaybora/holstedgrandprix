@@ -30,6 +30,7 @@ type Race struct {
 
 type RaceForJson struct {
 	No                 string       `json:"no"`
+	EventKey           string       `json:"eventkey"`
 	Lane1Team          *TeamForJson `json:"lane1team,omitempty"`
 	Lane2Team          *TeamForJson `json:"lane2team,omitempty"`
 	Lane3Team          *TeamForJson `json:"lane3team,omitempty"`
@@ -155,6 +156,14 @@ func (ds *RootService) PutSingleRace(
 	eventkey := datastore.NewKey(context, "Event", req.Race.EventKey, 0, nil)
 	race := &req.Race
 	race.EventKeyForGoon = eventkey
+
+	// if race.ActualStartTime == nil {
+	// 	race.ActualStartTime = time.Time()
+	// }
+
+	// if race.ActualEndTime == nil {
+	// 	race.ActualEndTime = time.Time()
+	// }
 
 	n := goon.NewGoon(r)
 	_, err := n.Put(race)
