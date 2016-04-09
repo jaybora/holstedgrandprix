@@ -35,33 +35,37 @@
                     {{race.no}}<br>{{race.scheduledstarttime| date :'shortTime':'+0100' }}
                 </td>
                 <td class="text-center hidden-xs" ng-click="editrace(race)">
-                    <img ng-src="/images/{{race| raceStatusImg}}" alt="{{race| raceStatus}}" style="height: 30px;" />
+                    <img ng-hide="raceActive(race) && blinkerVisible" ng-src="/images/{{race| raceStatusImg}}" alt="{{race| raceStatus}}" style="height: 30px;" />
+                    <p ng-show="raceActive(race) && blinkerVisible">Køres nu!</p>
                 </td>
                 <td class="text-center">
-                    {{race.lane1raceno == null ? race.lane1team.name : ('Vinder af løb ' + race.lane1raceno)}}
-                    <div ng-hide="race.lane1team | placeText:race === null">{{race.lane1team| placeText:race}}</div>
-                    <span ng-show="race.actualstarttime != null && race.actualendtime == null">
-                        <button class="btn btn-info" ng-click="pos1(race.lane1team, race)">1</button>
-                        <button class="btn btn-primary" ng-click="pos2(race.lane1team, race)">2</button>
-                        <button class="btn btn-default" ng-click="pos3(race.lane1team, race)">3</button>
+                    {{race.lane1raceno == null ? race.lane1team.name : (race.lane1raceno | winnerTeam)}}
+                    <div ng-show="(race.lane1team | placement:race.lane1raceno:race) === 1"><b>{{race.lane1team| placement:race.lane1raceno:race}}. plads</b></div>
+                    <div ng-show="(race.lane1team | placement:race.lane1raceno:race) > 1">{{race.lane1team| placement:race.lane1raceno:race}}. plads</div>
+                    <span ng-show="race.actualstarttime != null && race.actualendtime == null && (race.lane1team != null || race.lane1raceno != null)">
+                        <button class="btn btn-info" ng-click="pos1(race.lane1team, race.lane1raceno, race)">1</button>
+                        <button class="btn btn-primary" ng-click="pos2(race.lane1team, race.lane1raceno, race)">2</button>
+                        <button class="btn btn-default" ng-click="pos3(race.lane1team, race.lane1raceno, race)">3</button>
                     </span>
                 </td>
                 <td class="text-center">
-                    {{race.lane2raceno == null ? race.lane2team.name : ('Vinder af løb ' + race.lane2raceno)}}
-                    <div ng-hide="race.lane2team | placeText:race === null">{{race.lane2team| placeText:race}}</div>
-                    <span ng-show="race.actualstarttime != null && race.actualendtime == null">
-                        <button class="btn btn-info" ng-click="pos1(race.lane2team, race)">1</button>
-                        <button class="btn btn-primary" ng-click="pos2(race.lane2team, race)">2</button>
-                        <button class="btn btn-default" ng-click="pos3(race.lane2team, race)">3</button>
+                    {{race.lane2raceno == null ? race.lane2team.name : (race.lane2raceno | winnerTeam)}}
+                    <div ng-show="(race.lane2team | placement:race.lane2raceno:race) === 1"><b>{{race.lane2team| placement:race.lane2raceno:race}}. plads</b></div>
+                    <div ng-show="(race.lane2team | placement:race.lane2raceno:race) > 1">{{race.lane2team| placement:race.lane2raceno:race}}. plads</div>
+                    <span ng-show="race.actualstarttime != null && race.actualendtime == null && (race.lane2team != null || race.lane2raceno != null)">
+                        <button class="btn btn-info" ng-click="pos1(race.lane2team, race.lane2raceno, race)">1</button>
+                        <button class="btn btn-primary" ng-click="pos2(race.lane2team, race.lane2raceno, race)">2</button>
+                        <button class="btn btn-default" ng-click="pos3(race.lane2team, race.lane2raceno, race)">3</button>
                     </span>
                 </td>
                 <td class="text-center">
-                    {{race.lane3raceno == null ? race.lane3team.name : ('Vinder af løb ' + race.lane3raceno)}}
-                    <div ng-hide="race.lane3team | placeText:race === null">{{race.lane3team| placeText:race}}</div>
-                    <span ng-show="race.actualstarttime != null && race.actualendtime == null">
-                        <button class="btn btn-info" ng-click="pos1(race.lane3team, race)">1</button>
-                        <button class="btn btn-primary" ng-click="pos2(race.lane3team, race)">2</button>
-                        <button class="btn btn-default" ng-click="pos3(race.lane3team, race)">3</button>
+                    {{race.lane3raceno == null ? race.lane3team.name : (race.lane3raceno | winnerTeam)}}
+                    <div ng-show="(race.lane3team | placement:race.lane3raceno:race) === 1"><b>{{race.lane3team| placement:race.lane3raceno:race}}. plads</b></div>
+                    <div ng-show="(race.lane3team | placement:race.lane3raceno:race) > 1">{{race.lane3team| placement:race.lane3raceno:race}}. plads</div>
+                    <span ng-show="race.actualstarttime != null && race.actualendtime == null && (race.lane3team != null || race.lane3raceno != null)">
+                        <button class="btn btn-info" ng-click="pos1(race.lane3team, race.lane3raceno, race)">1</button>
+                        <button class="btn btn-primary" ng-click="pos2(race.lane3team, race.lane3raceno, race)">2</button>
+                        <button class="btn btn-default" ng-click="pos3(race.lane3team, race.lane3raceno, race)">3</button>
                     </span>
                 </td>
                 <td class="text-center hidden-xs">

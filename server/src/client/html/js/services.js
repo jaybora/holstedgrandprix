@@ -5,8 +5,8 @@ angular.module('grandprix')
             var event = null;
             var teams = null;
             var teamMap = {};
-            var races = null;
-            var raceMap = {};
+//            var races = null;
+            var racesMap = {};
             // var categories = null;
             // var categoryMap = {};
             // var stores = null;
@@ -18,18 +18,18 @@ angular.module('grandprix')
 //            var gapi_grandprix;
 
 
-            globalservice.setRaces = function (newraces) {
-                races = newraces;
-                raceMap = {}
-                if (races != null) {
-                    races.sort(function (a, b) {
-                        return a.no.localeCompare(b.no)
-                    })
-                    races.forEach(function (race) {
-                        raceMap[race.no] = race;
-                    })
-                }
-            }
+//            globalservice.setRaces = function (newraces) {
+//                races = newraces;
+//                raceMap = {}
+//                if (races != null) {
+//                    races.sort(function (a, b) {
+//                        return a.no.localeCompare(b.no)
+//                    })
+//                    races.forEach(function (race) {
+//                        raceMap[race.no] = race;
+//                    })
+//                }
+//            }
 
             globalservice.setTeams = function (newteams) {
                 teams = newteams;
@@ -49,7 +49,11 @@ angular.module('grandprix')
             }
 
             globalservice.getRaces = function () {
-                return races;
+                return event.currentjson.races;
+            }
+
+            globalservice.getRacesMap = function () {
+                return racesMap;
             }
 
 //            globalservice.loadCurrentJson = function () {
@@ -97,21 +101,21 @@ angular.module('grandprix')
                 });
             };
 
-            var loadRaces = function () {
-                console.log('Now loading races');
-                return GApi.execute('grandprix', 'listraces', {eventkey: currenteventkey}).then(function (resp) {
-                    console.log('Finished loading races.');
-                    globalservice.setRaces(resp.races);
-                    if (resp.races === null) {
-                        console.log('There was no races');
-                    } else {
-                        console.log('There was %d races', resp.races.length);
-                    }
-                });
-            };
+//            var loadRaces = function () {
+//                console.log('Now loading races');
+//                return GApi.execute('grandprix', 'listraces', {eventkey: currenteventkey}).then(function (resp) {
+//                    console.log('Finished loading races.');
+//                    globalservice.setRaces(resp.races);
+//                    if (resp.races === null) {
+//                        console.log('There was no races');
+//                    } else {
+//                        console.log('There was %d races', resp.races.length);
+//                    }
+//                });
+//            };
 
             globalservice.fetchTeamsAndRaces = function () {
-                return $q.all([loadTeams(), loadRaces(), globalservice.fetchEvent()]);
+                return $q.all([loadTeams(),  globalservice.fetchEvent()]);
             };
 //                promise = loadApi()
 //                        // authenticate()
@@ -133,6 +137,11 @@ angular.module('grandprix')
                     event = resp.event;
                     if (event.currentjson !== null && event.currentjson.length > 0) {
                         event.currentjson = JSON.parse(resp.event.currentjson);
+
+                        // Build the races map
+                        event.currentjson.races.forEach(function(race) {
+                           racesMap[race.no] = race;
+                        });
                     }
                     console.log("Got the event as: %o", event);
                 }, function () {

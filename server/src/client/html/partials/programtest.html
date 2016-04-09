@@ -30,20 +30,24 @@
                 <td class="text-center hidden-lg hidden-md hidden-sm">
                     {{race.no}}<br>{{race.scheduledstarttime| date :'shortTime'}}
                 </td>
-                <td class="text-center hidden-xs">
-                    <img ng-src="/images/{{race| raceStatusImg}}" alt="{{race| raceStatus}}" style="height: 30px;" />
+                <td class="text-center hidden-xs" style="height: 50px;">
+                    <img ng-hide="raceActive(race) && blinkerVisible" ng-src="/images/{{race| raceStatusImg}}" alt="{{race| raceStatus}}" style="height: 30px;" />
+                    <p ng-show="raceActive(race) && blinkerVisible">Køres nu!</p>
                 </td>
                 <td class="text-center">
-                    {{race.lane1raceno == null ? race.lane1team.name : ('Vinder af løb ' + race.lane1raceno)}}
-                    <div ng-hide="race.lane1team | placeText:race === null">{{race.lane1team| placeText:race}}</div>
+                    {{race.lane1raceno == null ? race.lane1team.name : (race.lane1raceno | winnerTeam)}}
+                    <div ng-show="(race.lane1team | placement:race.lane1raceno:race) === 1"><b>{{race.lane1team| placement:race.lane1raceno:race}}. plads</b></div>
+                    <div ng-show="(race.lane1team | placement:race.lane1raceno:race) > 1">{{race.lane1team| placement:race.lane1raceno:race}}. plads</div>
                 </td>
                 <td class="text-center">
-                    {{race.lane2raceno == null ? race.lane2team.name : ('Vinder af løb ' + race.lane2raceno)}}
-                    <div ng-hide="race.lane2team | placeText:race === null">{{race.lane2team| placeText:race}}</div>
+                    {{race.lane2raceno == null ? race.lane2team.name : (race.lane2raceno | winnerTeam)}}
+                    <div ng-show="(race.lane2team | placement:race.lane2raceno:race) === 1"><b>{{race.lane2team| placement:race.lane2raceno:race}}. plads</b></div>
+                    <div ng-show="(race.lane2team | placement:race.lane2raceno:race) > 1">{{race.lane2team| placement:race.lane2raceno:race}}. plads</div>
                 </td>
                 <td class="text-center">
-                    {{race.lane3raceno == null ? race.lane3team.name : ('Vinder af løb ' + race.lane3raceno)}}
-                    <div ng-hide="race.lane3team | placeText:race === null">{{race.lane3team| placeText:race}}</div>
+                    {{race.lane3raceno == null ? race.lane3team.name : (race.lane3raceno | winnerTeam)}}
+                    <div ng-show="(race.lane3team | placement:race.lane3raceno:race) === 1"><b>{{race.lane3team| placement:race.lane3raceno:race}}. plads</b></div>
+                    <div ng-show="(race.lane3team | placement:race.lane3raceno:race) > 1">{{race.lane3team| placement:race.lane3raceno:race}}. plads</div>
                 </td>
                 <td class="text-center hidden-xs">
                     {{race.actualstarttime| date :'shortTime'}}

@@ -92,25 +92,28 @@
             <select class="form-control"
                     ng-options="team.teamkey as team.name for team in getTeams()"
                     ng-model="race.place1teamkey">
+                <option value="">-- Ingen --</option>
             </select>
         </div>
-        
+
         <div class="form-group">
             <label for="lane1">2. plads</label>
             <select class="form-control"
                     ng-options="team.teamkey as team.name for team in getTeams()"
                     ng-model="race.place2teamkey">
+                <option value="">-- Ingen --</option>
             </select>
         </div>
-        
+
         <div class="form-group">
             <label for="lane1">3. plads</label>
             <select class="form-control"
                     ng-options="team.teamkey as team.name for team in getTeams()"
                     ng-model="race.place3teamkey">
+                <option value="">-- Ingen --</option>
             </select>
         </div>
-        
+
 
         <div class="form-group">
             <div class="btn-group" role="group" aria-label="...">

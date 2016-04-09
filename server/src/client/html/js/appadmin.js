@@ -62,21 +62,38 @@ angular.module('grandprix', ['ngRoute', 'ngAnimate', 'angular-google-gapi', 'ui.
                     }
                 };
     })
-            .filter('placeText', function() {
-                return function(laneteam, race) {
-                    if (laneteam == null) {
+            .filter('placement', ['GlobalService', function(GlobalService) {
+                return function(laneteam, laneraceno, race) {
+                    var laneteamkey;
+                    if (laneraceno != null) {
+                        laneteamkey = GlobalService.getRacesMap()[laneraceno].place1team.key;
+                    } else if (laneteam != null) {
+                        laneteamkey = laneteam.key;
+                    } else {
                         return null;
-                    } else if (race.place1team != null && laneteam.key === race.place1team.key) {
-                        return "1. plads";
-                    } else if (race.place2team != null && laneteam.key === race.place2team.key) {
-                        return "2. plads";
-                    } else if (race.place3team != null && laneteam.key === race.place3team.key) {
-                        return "3. plads";
+                    }
+
+                    if (race.place1team != null && laneteamkey === race.place1team.key) {
+                        return 1;
+                    } else if (race.place2team != null && laneteamkey === race.place2team.key) {
+                        return 2;
+                    } else if (race.place3team != null && laneteamkey === race.place3team.key) {
+                        return 3;
                     } else {
                         return null;
                     }
                 };
-    })
+    }])
+            .filter('winnerTeam', ['GlobalService', function(GlobalService) {
+                return function(raceno) {
+                    var racesMap = GlobalService.getRacesMap();
+                    if (raceno !== null && racesMap[raceno] != null && racesMap[raceno].place1team != null) {
+                        return "Vinderen fra løb " + raceno + ": " + racesMap[raceno].place1team.name;
+                    } else {
+                        return "Vinder af løb " + raceno;
+                    }
+                };
+    }])
 
 ;
 
