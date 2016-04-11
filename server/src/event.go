@@ -15,7 +15,8 @@ type Event struct {
 	Key         string    `json:"key" datastore:"-" goon:"id"`
 	EventDate   time.Time `json:"eventdate" datastore:"eventdate"`
 	Name        string    `json:"name" datastore:"name"`
-	CurrentJson string    `json:"currentjson" datastore:"currentjson"`
+	CurrentJson []byte    `json:"-" datastore:"currentjson"`
+	CurrentJsonString string `json:"currentjson" datastore:"-"`
 }
 
 type EventForJson struct {
@@ -83,7 +84,7 @@ func (ds *RootService) GetSingleEvent(
 	context.Infof("Req key %s", req.Key)
 	event := &Event{Key: req.Key}
 	err := n.Get(event)
-
+	event.CurrentJsonString = string(event.CurrentJson)
 	resp.Event = *event
 	return err
 }
@@ -94,7 +95,7 @@ func (ds *RootService) PutSingleTestEvent(
 	req *PutSingleEventReq,
 	resp *SingleEventResp) error {
 
-	event := Event{Key: "Testevent", EventDate: time.Now(), Name: "Noget", CurrentJson: ""}
+	event := Event{Key: "Testevent", EventDate: time.Now(), Name: "Noget", CurrentJson: []byte{}}
 
 	return ds.PutSingleEvent(r, &PutSingleEventReq{Event: event}, resp)
 }
@@ -106,6 +107,7 @@ func (ds *RootService) PutSingleEvent(
 	resp *SingleEventResp) error {
 
 	event := &req.Event
+	event.CurrentJson = []byte(event.CurrentJsonString)
 
 	n := goon.NewGoon(r)
 	_, err := n.Put(event)
@@ -202,7 +204,7 @@ func (ds *RootService) UpdateCurrentJson(r *http.Request, eventkey string) error
 
 	js, err := json.Marshal(eventJson)
 	context.Debugf("JSON is %s", string(js))
-	event.CurrentJson = string(js)
+	event.CurrentJsonString = string(js)
 
 	// Save the json to memcache and datastore
 	resp := &SingleEventResp{}

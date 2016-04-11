@@ -49,7 +49,11 @@ angular.module('grandprix')
             }
 
             globalservice.getRaces = function () {
-                return event.currentjson.races;
+                if (event.currentjson != null) {
+                    return event.currentjson.races;
+                } else {
+                    return null;
+                }
             }
 
             globalservice.getRacesMap = function () {
@@ -115,7 +119,7 @@ angular.module('grandprix')
 //            };
 
             globalservice.fetchTeamsAndRaces = function () {
-                return $q.all([loadTeams(),  globalservice.fetchEvent()]);
+                return $q.all([loadTeams(), globalservice.fetchEvent()]);
             };
 //                promise = loadApi()
 //                        // authenticate()
@@ -139,8 +143,8 @@ angular.module('grandprix')
                         event.currentjson = JSON.parse(resp.event.currentjson);
 
                         // Build the races map
-                        event.currentjson.races.forEach(function(race) {
-                           racesMap[race.no] = race;
+                        event.currentjson.races.forEach(function (race) {
+                            racesMap[race.no] = race;
                         });
                     }
                     console.log("Got the event as: %o", event);
