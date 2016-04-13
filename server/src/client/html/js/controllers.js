@@ -213,7 +213,7 @@ angular.module('grandprix').
 
                                     })
                         } else if (callbackdata.action === 'delete') {
-                            GApi.execute('grandprix', 'deleterace', {no: callbackdata.race.no, eventkey: callbackdata.team.eventkey})
+                            GApi.execute('grandprix', 'deleterace', {no: callbackdata.race.no, eventkey: callbackdata.race.eventkey})
                                     .then(function (resp) {
                                         GlobalService.fetchTeamsAndRaces(true).then(function (resp) {
                                             console.log('Resp on delete race: %o', resp)
