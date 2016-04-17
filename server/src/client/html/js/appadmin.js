@@ -40,7 +40,7 @@ angular.module('grandprix', ['ngRoute', 'ngAnimate', 'angular-google-gapi', 'ui.
                         return 'sleep.png';
                     } else {
                         if (race.actualendtime == null) {
-                            return 'racecar.png';
+                            return 'race_clipped.png';
                         } else {
                             return 'flag.png';
                         }
@@ -65,7 +65,8 @@ angular.module('grandprix', ['ngRoute', 'ngAnimate', 'angular-google-gapi', 'ui.
             .filter('placement', ['GlobalService', function(GlobalService) {
                 return function(laneteam, laneraceno, race) {
                     var laneteamkey;
-                    if (laneraceno != null) {
+                    if (laneraceno != null && GlobalService.getRacesMap()[laneraceno] != null &&
+                            GlobalService.getRacesMap()[laneraceno].place1team != null) {
                         laneteamkey = GlobalService.getRacesMap()[laneraceno].place1team.key;
                     } else if (laneteam != null) {
                         laneteamkey = laneteam.key;

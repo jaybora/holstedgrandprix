@@ -201,5 +201,7 @@ func (ds *RootService) DeleteRace(
 	eventkey := datastore.NewKey(context, "Event", req.EventKey, 0, nil)
 	key := datastore.NewKey(context, "Race", req.No, 0, eventkey)
 
-	return n.Delete(key)
+	err := n.Delete(key)
+        ds.UpdateCurrentJson(r, req.EventKey)
+        return err;
 }

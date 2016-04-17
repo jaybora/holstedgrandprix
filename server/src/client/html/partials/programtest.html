@@ -11,7 +11,7 @@
                     <th class="text-center hidden-xs">Planlagt starttid*</th>
                     <th class="text-center hidden-xs">Løbnr</th>
                     <th class="text-center hidden-lg hidden-md hidden-sm">Løbnr<br>Planlagt starttid*</th>
-                    <th class="text-center hidden-xs">Status</th>
+                    <th class="text-center">Status</th>
                     <th class="text-center">Bane 1</th>
                     <th class="text-center">Bane 2</th>
                     <th class="text-center">Bane 3</th>
@@ -30,9 +30,12 @@
                 <td class="text-center hidden-lg hidden-md hidden-sm">
                     {{race.no}}<br>{{race.scheduledstarttime| date :'shortTime'}}
                 </td>
-                <td class="text-center hidden-xs" style="height: 50px;">
-                    <img ng-hide="raceActive(race) && blinkerVisible" ng-src="/images/{{race| raceStatusImg}}" alt="{{race| raceStatus}}" style="height: 30px;" />
-                    <p ng-show="raceActive(race) && blinkerVisible">Køres nu!</p>
+                <td class="text-center hidden-xs" style="height: 40px;">
+                    <img ng-hide="raceActive(race) && blinkerVisible" ng-src="/images/{{race| raceStatusImg}}" alt="{{race| raceStatus}}" style="height: 18px;" />
+                    <div ng-show="raceActive(race) && blinkerVisible">Køres nu!</div>
+                </td>
+                <td class="text-center hidden-lg hidden-md hidden-sm" style="height: 20px;">
+                    <img ng-hide="raceActive(race) && blinkerVisible" ng-src="/images/{{race| raceStatusImg}}" alt="{{race| raceStatus}}" style="height: 15px;" />
                 </td>
                 <td class="text-center">
                     {{race.lane1raceno == null ? race.lane1team.name : (race.lane1raceno | winnerTeam)}}
