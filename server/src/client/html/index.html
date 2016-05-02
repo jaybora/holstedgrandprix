@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <title>Sæbekasseløb Holsted Skole</title>
+        <title>Holsted Sæbekasseløb</title>
 
         <!-- JavaScript libraries -->
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
@@ -28,7 +28,8 @@
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
-        <link rel="stylesheet" href="css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="css/cerulean.min.css"/>
+
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <script src="js/libs/underscore-min.js"></script>
@@ -53,9 +54,27 @@
 
         </script>
 
+        <style>
+            #background {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 1200px;
+                background-image: url('images/1.jpg');
+                background-repeat: repeat;
+                background-attachment: fixed;
+                background-size: cover;
+                opacity: 0.15;
+                -webkit-filter: blur(3px);
+                filter:alpha(opacity=15);
+            }
+        </style>
+
     </head>
     <body ng-controller="LandingCtrl" id="thebody">
-        <nav class="navbar navbar-inverse">
+        <div id="background"></div>
+        <nav class="navbar navbar-inverse" style="margin-bottom: 0;">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button"
@@ -67,14 +86,18 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Sæbekasseløb Holsted Skole</a>
+                    <a class="navbar-brand" href="#">Holsted Sæbekasseløb</a>
                 </div>
 
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav"  ng-hide="login_needed">
+                        <li ng-class="{active: isActive('/dayprogram')}"
+                            data-toggle="collapse" data-target=".in">
+                            <a href="#/dayprogram">Dagsprogram</a>
+                        </li>
                         <li ng-class="{active: isActive('/program')}"
                             data-toggle="collapse" data-target=".in">
-                            <a href="#/program">Program</a>
+                            <a href="#/program">Løbsprogram</a>
                         </li>
                         <li ng-class="{active: isActive('/rules')}"
                             data-toggle="collapse" data-target=".in">
@@ -94,7 +117,7 @@
             </div>
         </nav>
 
-        <div ng-view></div>
+        <span ng-view></span>
 
     </body>
     <script src="js/controllers.js"></script>
