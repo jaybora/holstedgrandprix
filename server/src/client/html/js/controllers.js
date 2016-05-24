@@ -17,10 +17,17 @@ angular.module('grandprix').
                 }
 
             }]).
-        controller('FrontpageCtrl', ['$scope',
-            function ($scope) {
+        controller('FrontpageCtrl', ['$scope', '$timeout',
+            function ($scope, $timeout) {
                 $scope.slides = [{image: 'images/1.jpg', text: 'Det tradionsrige sæbekasseløb ved Holsted Skole', id: 0},
                     {image: 'images/2.jpg', text: 'Er tilbage igen den 27. maj 2016', id: 1}]
+
+                function showcountdown() {
+                    $scope.showcountdown = (new Date("May 27, 2016 15:30:00") > new Date());
+                    $timeout(showcountdown, 1000);
+                }
+
+                $timeout(showcountdown, 1000);
 
             }]).
         controller('ProgramCtrl', ['$scope', 'GlobalService', '$timeout', '$uibModal', 'GApi', '$location',

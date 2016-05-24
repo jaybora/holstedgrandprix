@@ -1,7 +1,7 @@
 angular.module('grandprix', ['ngRoute', 'ngAnimate', 'angular-google-gapi', 'ui.bootstrap'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/frontpage', {templateUrl: 'partials/frontpage.html', controller: 'FrontpageCtrl'});
-        $routeProvider.when('/dayprogram', {templateUrl: 'partials/dayprogram.html'});
+        $routeProvider.when('/dayprogram', {templateUrl: 'partials/dayprogram.html', controller: 'FrontpageCtrl'});
         $routeProvider.when('/program', {templateUrl: 'partials/program.html', controller: 'ProgramCtrl'});
         $routeProvider.when('/programtest', {templateUrl: 'partials/programtest.html', controller: 'ProgramCtrl'});
         $routeProvider.when('/rules', {templateUrl: 'partials/rules.html'});
