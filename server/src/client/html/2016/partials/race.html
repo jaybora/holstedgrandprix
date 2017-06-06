@@ -1,0 +1,127 @@
+<div class="modal-header">
+    <h3 class="modal-title" ng-show="mode == 'new'">Tilføj et løb</h3>
+    <h3 class="modal-title" ng-show="mode == 'edit'">Ret et løb</h3>
+</div>
+<div class="modal-body">
+    <form>
+        <div class="form-group">
+            <label for="teamkey">Løbnummer</label>
+            <input type="text" ng-model="race.no" class="form-control" id="raceno" placeholder="Et nr"/>
+        </div>
+
+        <div class="form-group">
+            <label for="teamname">Planlagt starttid</label>
+            <p class="input-group">
+                <uib-timepicker ng-model="race.scheduledstarttime" show-meridian="false"></uib-timepicker>
+            </p>
+        </div>
+
+        <!-- Lane 1 -->
+        <div class="form-group">
+            <label for="lane1">Bane 1 - Team</label>
+            <select class="form-control"
+                    ng-options="team.teamkey as team.name for team in getTeams()"
+                    ng-model="race.lane1teamkey">
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="lane1">Bane 1 - Vinder fra løbnr</label>
+            <select class="form-control"
+                    ng-options="race.no as race.no for race in getRaces()"
+                    ng-model="race.lane1raceno"
+                    ng-disabled="getRaces().length === 0">
+            </select>
+        </div>
+
+        <!-- Lane 2 -->
+        <div class="form-group">
+            <label for="lane1">Bane 2 - Team</label>
+            <select class="form-control"
+                    ng-options="team.teamkey as team.name for team in getTeams()"
+                    ng-model="race.lane2teamkey">
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="lane1">Bane 2 - Vinder fra løbnr</label>
+            <select class="form-control"
+                    ng-options="race.no as race.no for race in getRaces()"
+                    ng-model="race.lane2raceno"
+                    ng-disabled="getRaces().length === 0">
+            </select>
+        </div>
+
+        <!-- Lane 3 -->
+        <div class="form-group">
+            <label for="lane1">Bane 3 - Team</label>
+            <select class="form-control"
+                    ng-options="team.teamkey as team.name for team in getTeams()"
+                    ng-model="race.lane3teamkey">
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="lane1">Bane 3 - Vinder fra løbnr</label>
+            <select class="form-control"
+                    ng-options="race.no as race.no for race in getRaces()"
+                    ng-model="race.lane3raceno"
+                    ng-disabled="getRaces().length === 0">
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="racenote">Note</label>
+            <input type="text" ng-model="race.note" class="form-control" id="racenote" placeholder="En evt. note"/>
+        </div>
+
+        <div class="form-group">
+            <label for="actualstarttime">Start tid</label>
+            <input type="text" ng-model="race.actualstarttime" class="form-control" id="actualstarttime"/>
+        </div>
+
+        <div class="form-group">
+            <label for="actualendtime">Slut tid</label>
+            <input type="text" ng-model="race.actualendtime" class="form-control" id="actualendtime"/>
+        </div>
+
+
+        <!-- Placement -->
+        <div class="form-group">
+            <label for="lane1">1. plads</label>
+            <select class="form-control"
+                    ng-options="team.teamkey as team.name for team in getTeams()"
+                    ng-model="race.place1teamkey">
+                <option value="">-- Ingen --</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="lane1">2. plads</label>
+            <select class="form-control"
+                    ng-options="team.teamkey as team.name for team in getTeams()"
+                    ng-model="race.place2teamkey">
+                <option value="">-- Ingen --</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="lane1">3. plads</label>
+            <select class="form-control"
+                    ng-options="team.teamkey as team.name for team in getTeams()"
+                    ng-model="race.place3teamkey">
+                <option value="">-- Ingen --</option>
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <div class="btn-group" role="group" aria-label="...">
+                <input type="submit" class="btn btn-default" style="display:none;" value="Gem" ng-click="ok()"/>
+                <button class="btn" style="width: 70pt;" ng-click="cancel()">Annuller</button>
+                <button class="btn btn-danger" style="width: 70pt;" ng-click="delete()">Slet</button>
+                <button type="submit" class="btn btn-default" style="width: 70pt;" ng-click="ok()">Gem</button>
+            </div>
+        </div>
+    </form>
+</div>

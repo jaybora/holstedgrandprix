@@ -1,5 +1,5 @@
 application: holstedgrandprix
-version: v1
+version: v2
 runtime: go
 api_version: go1
 
@@ -26,6 +26,9 @@ handlers:
 
 - url: /images
   static_dir: client/html/images
+
+- url: /2016
+  static_dir: client/html/2016
 
 - url: /.*
   script: _go_app

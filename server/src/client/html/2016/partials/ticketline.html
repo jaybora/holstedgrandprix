@@ -1,0 +1,40 @@
+<div class="modal-header">
+	<h3 class="modal-title" ng-show="mode == 'new'">Tilføj en linje til bon</h3>
+	<h3 class="modal-title" ng-show="mode == 'edit'">Ret en linje</h3>
+</div>
+<div class="modal-body">
+	<form>
+		<div class="form-group">
+			<label for="categoryname">Kategori</label>
+			<select class="form-control" 
+					    ng-options="category.id as category.name for category in categories" 
+						ng-model="line.categoryid"
+						ng-change="categoryChoosen()">
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="singleprice">Enkel pris</label>
+			<input type="number" ng-model="singleprice" class="form-control" id="singleprice" required
+			       ng-change="calculateprice()" step="0.01"/>
+		</div>
+		<div class="form-group">
+			<label for="pieces">Antal</label>
+			<input type="number" min="1" max="99" size="2" maxlength="2" 
+			       ng-model="pieces" class="form-control" id="pieces" required
+			       ng-change="calculateprice()"/>
+		</div>
+		<div class="form-group">
+			<label for="pieces">Samlet pris</label>
+			<span>{{calculatedprice | number:2}}</span>
+		</div>
+
+		<div class="form-group text-center">
+			<div class="btn-group" role="group" aria-label="...">	
+				<input type="submit" class="btn btn-default" style="width: 70pt; display:none;" value="Gem" ng-click="ok()"/>
+				<button class="btn" style="width: 70pt;" ng-click="cancel()">Annuller</button>
+				<button class="btn btn-danger" style="width: 70pt;" ng-click="delete()">Slet</button>
+				<input type="submit" class="btn btn-default" style="width: 70pt;" value="Gem" ng-click="ok()"/>
+			</div>
+		</div>
+	</form>
+</div>

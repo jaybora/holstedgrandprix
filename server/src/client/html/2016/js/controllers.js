@@ -23,7 +23,7 @@ angular.module('grandprix').
                     {image: 'images/2.jpg', text: 'Er tilbage igen den 27. maj 2016', id: 1}]
 
                 function showcountdown() {
-                    $scope.showcountdown = (new Date("June 17, 2017 13:00:00") > new Date());
+                    $scope.showcountdown = (new Date("May 27, 2016 15:30:00") > new Date());
                     $timeout(showcountdown, 1000);
                 }
 

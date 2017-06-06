@@ -1,6 +1,6 @@
 angular.module('grandprix')
         .factory('GlobalService', function ($q, GApi) {
-            var currenteventkey = "HOL2017";
+            var currenteventkey = "HOL2016";
             var globalservice = {};
             var event = null;
             var teams = null;

@@ -1,0 +1,88 @@
+<div class="container">
+	<h3 style="margin-top: 0;">Indtastning <small>af ny bon</small></h3>
+
+	<div class="alert alert-success" role="alert" ng-show="respsuccess">{{resptext}}</div>
+	<div class="alert alert-danger" role="alert" ng-show="errmsg">{{errmsg}}</div>
+
+	<form class="form-horizontal" ng-hide="loading">
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="ticketdate">Dato</label>
+					<div class="col-md-8">
+						<p class="input-group">
+						    <input type="text" class="form-control" datepicker-popup="dd.MM.yyyy" 
+						    		id="ticketdate"
+						    		ng-model="ticket.ticketdate" is-open="calendarpickeropened" ng-required="true" close-text="Luk"/>
+						    <span class="input-group-btn">
+						        <button type="button" class="btn" ng-click="opencalendarpicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+						    </span>
+				        </p>
+				    </div>
+			    </div>
+		    </div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="store" class="col-md-4 control-label">Butik</label>
+					<div class="col-md-8">
+						<select class="form-control" 
+						    ng-options="store.id as store.name for store in stores" 
+							ng-model="ticket.storeid"
+							ng-change="storeChoosen()">
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" ng-hide="ticket.storeid == null">
+			<!-- <div class="form-group"> -->
+				
+				<div class="col-md-12">
+					<div class="panel panel-default">
+						<div class="panel-heading h3">
+							Bon for {{ticket.storeid | storeName}}<span class="pull-right">{{total | number:2}} kr</span>
+							<div class="text-right">
+								<button class="btn btn-default" ng-click="editline()">Ny linje</button>
+							</div>
+						</div>
+						<div class="panel-body">
+							<table class="table table-striped">
+								<tr style="cursor: pointer;" 
+								    ng-repeat="line in ticket.lines" 
+								    ng-click="editline(line)">
+									<td>{{line.categoryid | categoryName}}</td>
+									<td class="text-right">{{line.price | number:2}} kr</td>
+								</tr>
+
+							</table>
+						</div>
+					</div>
+				</div>
+			<!-- </div> -->
+		</div>
+		<div class="row" ng-hide="ticket.storeid == null">
+			<div class="form-group">
+				<div class="text-center">
+					<div class="btn-group" role="group" aria-label="...">	
+						<button class="btn" style="width: 80pt;" ng-click="cancel()">Annuller</button>
+						<button class="btn btn-danger" ng-show="mode=='edit'" style="width: 80pt;" ng-click="delete()">Slet</button>
+		    			<input type="submit" class="btn btn-info" style="width: 80pt;" ng-click="ok()" value="Gem"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	
+	<div ng-show="loading" class="progress progress-striped active">
+  		<div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+  			Venter på server..
+  		</div>
+    </div>
+
+</div>
+
+
+		
+		
+</div>
